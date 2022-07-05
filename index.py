@@ -8,13 +8,6 @@ import statistics_ATP
 import versus_ATP
 import preprocessing_ATP
 import group_ATP
-import home
-import about
-import inspect
-import prediction
-import conclusion
-import about
-import __init__
 import config
 import member
 from collections import OrderedDict
