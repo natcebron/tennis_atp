@@ -95,7 +95,7 @@ def app():
         pro2 = pro2.reset_index()
         pro['percent'] = pro2['ATP']
 
-        # fig = px.pie(pro, values='value', names='group',color='group',facet_col='Series')
+        fig = px.pie(pro, values='value', names='group',color='group',facet_col='Series')
 
 
         fig.update_layout(barmode='relative')
