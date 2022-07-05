@@ -4,3 +4,4 @@ seaborn
 tensorflow
 plotly.express
 xlrd
+openpyxl
