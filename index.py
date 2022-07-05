@@ -11,7 +11,7 @@ import group_ATP
 import config
 import member
 from collections import OrderedDict
-
+import inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 logo = os.path.join(currentdir, 'data/covid_1.png')
 PAGE_CONFIG = {"page_title":"DeMACIA-RX.io","page_icon": logo,"layout":"wide"}
