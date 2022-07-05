@@ -3,3 +3,4 @@ opencv-python-headless
 seaborn
 tensorflow
 plotly.express
+xlrd
