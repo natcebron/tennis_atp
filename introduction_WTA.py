@@ -20,5 +20,5 @@ def app():
     local_css(os.path.join(currentdir, "style.css"))
     #Préparation de la page
     st.markdown("# WTA PREDICTION")
-    image = Image.open('C:/Users/ncebron/tennis_ATP/WTA/data/WTA.jpg')
+    image = Image.open('WTA/data/WTA.jpg')
     st.image(image)
