@@ -47,20 +47,20 @@ def app():
     dataset1 = dataset1.drop(['SJL','SJW','LBL','LBW','EXL','EXW','AvgL','AvgW','MaxL','MaxW','PSW','PSL','Comment',
                           'L3','L2','L1','W3','W2','W1',],axis=1)
 
-    a_2010 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2010.csv',sep=',')
-    a_2011 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2011.csv',sep=',')
-    a_2012 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2012.csv',sep=',')
-    a_2013 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2013.csv',sep=',')
-    a_2014 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2014.csv',sep=',')
-    a_2015 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2015.csv',sep=',')
-    a_2016 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2016.csv',sep=',')
-    a_2017 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2017.csv',sep=',')
-    a_2018 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2018.csv',sep=',')
+    a_2010 = pd.read_table('WTA/data/wta_matches_2010.csv',sep=',')
+    a_2011 = pd.read_table('WTA/data/wta_matches_2011.csv',sep=',')
+    a_2012 = pd.read_table('WTA/data/wta_matches_2012.csv',sep=',')
+    a_2013 = pd.read_table('WTA/data/wta_matches_2013.csv',sep=',')
+    a_2014 = pd.read_table('WTA/data/wta_matches_2014.csv',sep=',')
+    a_2015 = pd.read_table('WTA/data/wta_matches_2015.csv',sep=',')
+    a_2016 = pd.read_table('WTA/data/wta_matches_2016.csv',sep=',')
+    a_2017 = pd.read_table('WTA/data/wta_matches_2017.csv',sep=',')
+    a_2018 = pd.read_table('WTA/data/wta_matches_2018.csv',sep=',')
 
-    a_2019 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2019.csv',sep=',')
-    a_2020 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2020.csv',sep=',')
-    a_2021 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2021.csv',sep=',')
-    a_2022 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_matches_2022.csv',sep=',')
+    a_2019 = pd.read_table('WTA/data/wta_matches_2019.csv',sep=',')
+    a_2020 = pd.read_table('WTA/data/wta_matches_2020.csv',sep=',')
+    a_2021 = pd.read_table('WTA/data/wta_matches_2021.csv',sep=',')
+    a_2022 = pd.read_table('WTA/data/wta_matches_2022.csv',sep=',')
 
     dataset2 = pd.concat([a_2010,a_2011,a_2012,a_2013,a_2014,a_2015,a_2016,a_2017,a_2018,a_2019,a_2020,a_2021, a_2022])
 
