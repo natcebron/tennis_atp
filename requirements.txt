@@ -5,3 +5,4 @@ tensorflow
 plotly.express
 xlrd
 openpyxl
+scikit-learn
