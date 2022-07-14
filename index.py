@@ -27,7 +27,6 @@ from streamlit_option_menu import option_menu
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 logo = os.path.join(currentdir, 'data/covid_1.png')
 import streamlit as st
-import hydralit_components as hc
 import datetime
 
 st.set_page_config(layout="wide")
