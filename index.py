@@ -51,8 +51,8 @@ st.markdown("""
 with st.sidebar:
     selected = option_menu(
     menu_title='Menu',
-    options=['ATP','WTA','Double'],
-    icons=['file-earmark-easel','file-earmark-code','file-earmark-slides'],
+    options=['ATP','WTA'],
+    icons=['file-earmark-easel','file-earmark-code'],
     menu_icon='grid-1x2',default_index=0,    styles={
         "container": {"padding": "0!important", "background-color": "#0E1117"},
         "icon": {"color": "orange", "font-size": "15px"}, 
