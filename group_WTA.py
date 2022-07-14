@@ -43,12 +43,11 @@ def app():
     st.markdown(""" <style> .font {font-size:16px ; font-family: 'Arial'; color: #FFFFFF;} </style> """, unsafe_allow_html=True)
     st.markdown("# MODEL PREDICTION")
 
-#################################################
-# IMPORTATION DU MODEL ET PREPARATION DES DONNEES 
-#################################################
-    df = pd.read_csv("ATP/df.csv")
-    df_v3 = pd.read_csv("ATP/df_v3.csv")
-
+####################
+# IMPORTATION DU MODEL 
+####################
+    df = pd.read_csv("WTA/df.csv")
+    df_v3 = pd.read_csv("WTA/df_v3.csv")
     list_of_names = df['player_1'].to_list()
     list_of_names2 = df['player_2'].to_list()
     final_list = list_of_names + list_of_names2
@@ -58,14 +57,8 @@ def app():
     fruit_dictionary = dict(zip(final_list, lst))
 
     df = df.sort_values(by='Date_x') 
-    df["Round"].replace({"1st Round": "1",
-                         "2nd Round": "2",
-                         "3rd Round": "3",
-                         "4th Round" : "4",
-                         "Quarterfinals": "5",
-                         "Semifinals": "6",
-                         "The Final": "7",
-                         "Round Robin":"8"}, inplace=True)
+    df = df.drop(df[(df['Tier'] == 'WTA251') | (df['Tier'] == 'WTA252')| (df['Tier'] == 'WTA254') | (df['Tier'] == 'WTA255')| (df['Tier'] == 'WTA256')| (df['Tier'] == 'WTA258')| (df['Tier'] == 'WTA259')| (df['Tier'] == 'WTA261')| (df['Tier'] == 'WTA263')| (df['Tier'] == 'WTA264')| (df['Tier'] == 'WTA265')| (df['Tier'] == 'WTA266')| (df['Tier'] == 'WTA268')| (df['Tier'] == 'WTA269')| (df['Tier'] == 'WTA271')| (df['Tier'] == 'WTA272')| (df['Tier'] == 'WTA273')| (df['Tier'] == 'WTA275')].index)
+
 
     df["Surface"].replace({"Clay": "1",
                          "Grass": "2",
@@ -74,13 +67,17 @@ def app():
     df["Court"].replace({"Outdoor": "1",
                          "Indoor": "2"}, inplace=True)
 
-    df["Series"].replace({"ATP250": "1",
-                         "ATP500": "2",
-                         "Masters 1000": "3",
-                         "Masters Cup": "4",
-                         "Grand Slam": "5"}, inplace=True)
-    df = df.drop(['1_ace','1_df','1_svpt','1_1stIn','1_1stWon','1_2ndWon','1_SvGms','1_bpSaved','1_bpFaced','2_ace','2_df','2_svpt','2_1stIn','2_1stWon',
-    '2_2ndWon','2_SvGms','2_bpSaved','2_bpFaced','1_rank','2_rank'],axis=1)
+    df["Tier"].replace({"International": "1",
+                         "Premier": "2",
+                         "WTA1000": "3",
+                         "WTA500": "4",
+                         "Grand Slam": "5",
+                           "WTA250":'6',
+                   "Tour Championships":"7"}, inplace=True)
+    #df = df.drop(['WTA', 'Location','Tournament','Date_x','second_sets','first_sets','score','minutes','second_ace',
+    #          'second_df','second_svpt','second_1stIn','second_1stWon','second_2ndWon','second_SvGms','second_bpSaved',
+    #         'second_bpFaced','first_ace','first_df','first_svpt','first_1stIn','first_1stWon','first_2ndWon','first_SvGms',
+    #          'first_bpSaved','first_bpFaced','Surface','Round'],axis=1)
 
     df["hand_1"].replace({"R": "1",
                          "L": "2",'U':'3'}, inplace=True)
@@ -90,18 +87,28 @@ def app():
     list_of_names2 = df['player_2'].to_list()
     final_list = list_of_names + list_of_names2
     final_list = list(dict.fromkeys(final_list))
+
     lst = list(range(0,len(final_list)))
     fruit_dictionary = dict(zip(final_list, lst))
+
     df=df.replace({"player_1": fruit_dictionary})
     df=df.replace({"player_2": fruit_dictionary})
+
+
     df = df.drop(df[(df['surface'] == 'Carpet')].index)
+
     df=df.dropna(axis=0)
     df = df.iloc[: , 1:]
     df2 = df.copy()
+
     y = df.target
     df.drop(['target'], axis=1,inplace=True)
-    df.drop(['Best of','Date_x','Tournament','Location','sets_1','sets_2','tourney_name','surface','Date_y','match_num','score','best_of','round','minutes'], axis=1,inplace=True)
-    df.drop(['hand_1','hand_2','Round','ATP'], axis=1,inplace=True)
+    #df.drop(['first_age','second_age'], axis=1,inplace=True)
+    df.drop(['hand_1','hand_2','Round'], axis=1,inplace=True)
+    df.drop(['Best of','Date_x','tourney_name','Location','sets_1','sets_2','surface','score','minutes'], axis=1,inplace=True)
+    df = df.drop(['1_ace','1_df','1_svpt','1_1stIn','1_1stWon','1_2ndWon','1_SvGms','1_bpSaved','1_bpFaced','2_ace','2_df','2_svpt','2_1stIn','2_1stWon',
+    '2_2ndWon','2_SvGms','2_bpSaved','2_bpFaced','WTA'],axis=1)
+
     #######
     # MODEL
     #######
@@ -111,8 +118,9 @@ def app():
     #rfc.fit(X_train, y_train)
     #y_pred_test = rfc.predict(X_test)
     #st.write(accuracy_score(y_test, y_pred_test))
-    #joblib.dump(rfc, "ATP/ATP.joblib")
-    loaded_rf = joblib.load("ATP/ATP.joblib")
+    #joblib.dump(rfc, "WTA/WTA.joblib")
+    loaded_rf = joblib.load("WTA/WTA.joblib")
+
     test20 = loaded_rf.predict_proba(X_test)
     test20=pd.DataFrame(test20)
     test20.columns = ['prono_1', 'prono_2']
@@ -135,7 +143,7 @@ def app():
     result=result.replace({"player_1": fruit_dictionary10})
     result=result.replace({"player_2": fruit_dictionary10})
 
-    #result = result.drop(['league_name','league_id','first_age','second_age','first_rank','second_rank','category','userName','surface','Court','series', 'Best of','first_Pts','second_Pts','first_hand','second_hand'],axis=1)
+        #result = result.drop(['league_name','league_id','first_age','second_age','first_rank','second_rank','category','userName','surface','Court','series', 'Best of','first_Pts','second_Pts','first_hand','second_hand'],axis=1)
     result = result[['player_1','player_2','target','prono_1','prono_2','B365_1','B365_2']]
     m=10
     result['diff'] = result['prono_1'] - result['prono_2']
@@ -168,31 +176,19 @@ def app():
     st.dataframe(d_ROI)
 
 
-
-
-
-
-
-
-
-
-
-
-
     ############
     # PREDICTION
     ############
-
     st.markdown('## PREDICTION')
-    df_v3 = pd.read_csv("ATP/df_v3.csv")
+    df_v3 = pd.read_csv("WTA/df_v3.csv")
     df_v3['Date_x'] = pd.to_datetime(df_v3['Date_x'])
     df_v3 = df_v3.sort_values(by='Date_x') 
     P1_list = list(df_v3['player'].unique())
     P2_list = list(df_v3['Round'].unique())
     P3_list = list(df_v3['Surface'].unique())
-    P4_list = list(df_v3['Series'].unique())
+    P4_list = list(df_v3['Tier'].unique())
     P5_list = list(df_v3['Court'].unique())
-    P6_list = list(df_v3['Tournament'].unique())
+    P6_list = list(df_v3['tourney_name'].unique())
 
     col1,col2,col3 = st.columns(3)
     with col1:
@@ -206,8 +202,9 @@ def app():
         # P7 = st.selectbox(label = "Tournament", options = P6_list)
 
     with col3:
+        P3 = st.selectbox(label = "Round", options = P2_list)
         P4 = st.selectbox(label = "Surface", options = P3_list)
-        P5 = st.selectbox(label = "Series", options = P4_list)
+        P5 = st.selectbox(label = "Tier", options = P4_list)
 
     with st.form(key='my_form_to_submit'):
 
@@ -215,14 +212,13 @@ def app():
     if submit_button:
 
 
-        dfv4 = df_v3[['Tournament', 'ATP']] 
-        dict2 = dfv4.set_index('Tournament').to_dict()['ATP']
+        dfv4 = df_v3[['tourney_name', 'WTA']] 
+        dict2 = dfv4.set_index('tourney_name').to_dict()['WTA']
 
 
-
-
-        data = [{'Series':P5,
+        data = [{'Tier':P5,
                 'Court':P6,
+                'Bestof':P5,
                 'player_1':P1,
                 '1_hand':P1,
                 'Pts_1':P1,
@@ -237,9 +233,10 @@ def app():
                 'Rank_2':P2,
                 'Pts_2':P2
                 }]
+        
         dataf = pd.DataFrame(data)
+        dataf['Bestof'] = np.where(dataf['Tier']=="Grand Slam", '5', '3')
         dataf=dataf.replace({"Tournament": dict2})
-
 
 
         dataf["Surface"].replace({"Clay": "1",
@@ -249,13 +246,14 @@ def app():
         dataf["Court"].replace({"Outdoor": "1",
                          "Indoor": "2"}, inplace=True)
 
-        dataf["Series"].replace({"ATP250": "1",
-                         "ATP500": "2",
+        dataf["Tier"].replace({"WTA250": "1",
+                         "WTA500": "2",
                          "Masters 1000": "3",
                          "Masters Cup": "4",
-                         "Grand Slam": "5"}, inplace=True)
+                         "Grand Slam": "5",
+                         "International":'6'}, inplace=True)
 
-        concatenated = pd.read_csv("ATP/df.csv")
+        concatenated = pd.read_csv("WTA/df.csv")
         list_of_names = concatenated['player_1'].to_list()
         list_of_names2 = concatenated['player_2'].to_list()
         final_list = list_of_names + list_of_names2
@@ -268,8 +266,8 @@ def app():
         dataf=dataf.replace({"player_2": fruit_dictionary})
 
 
-        test5 = pd.read_table('C:/Users/ncebron/tennis_ATP/test5.csv',sep=',')
-        test6 = pd.read_table('C:/Users/ncebron/tennis_ATP/test6.csv',sep=',')
+        test5 = pd.read_csv("WTA/test5.csv")
+        test6 = pd.read_csv("WTA/test6.csv")
 
         list_of_names = test5['player'].to_list()
         list_of_names2 = test5['rank_2022'].to_list()
@@ -306,8 +304,8 @@ def app():
                          "L": "2",'U':'3'}, inplace=True)
         dataf=dataf.replace({"age_1": fruit_dictionary11})
         dataf=dataf.replace({"age_2": fruit_dictionary11})
-        dataf.drop(['1_hand','2_hand'], axis=1,inplace=True)
-
+        dataf.drop(['1_hand','2_hand','Bestof'], axis=1,inplace=True)
+        dataf = dataf[['Tier','Court','Surface','player_1','player_2','Rank_1','Rank_2','Pts_1','Pts_2','B365_1','B365_2','age_1','age_2']]
         st.dataframe(dataf)
 
 

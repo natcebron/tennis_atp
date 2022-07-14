@@ -24,43 +24,38 @@ def local_css(file_name):
 def app():
     currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))  
     local_css(os.path.join(currentdir, "style.css"))
-    #Préparation de la page
     st.markdown(""" <style> .font {font-size:16px ; font-family: 'Arial'; color: #FFFFFF;} </style> """, unsafe_allow_html=True)
     st.markdown("# PLAYER CHOICE")
 
     ##########################
-    # PREPARATION DES FICHIERS
+    # IMPORTATION DES FICHIERS
     ##########################
-    concatenated = pd.read_csv("ATP/df_merged.csv")
-    df_v3 = pd.read_csv("ATP/df_v3.csv")
-    df_v3['Date_x'] = pd.to_datetime(df_v3['Date_x'])
-    df_v3 = df_v3.sort_values(by='Date_x') 
-
-    P1_list = list(df_v3['player'].unique())
+    base = pd.read_csv("WTA/df_merged.csv")
+    d_exploration = pd.read_csv("WTA/df_v3.csv")
+    d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
+    d_exploration = d_exploration.sort_values(by='Date_x') 
+    P1_list = list(d_exploration['player'].unique())
     with st.sidebar:
         P1 = st.selectbox(label = "Player 1", options = P1_list)
         P2 = st.selectbox(label = "Player 2", options = P1_list)
 
     #############
     # RANK PLAYER
-    #############
+    #############    
     st.markdown('## RANK')
     query = f"player=='{P1}' | player=='{P2}'"
-
-    df_filtered = df_v3.query(query)
-
+    df_filtered = d_exploration.query(query)
     fig = px.line(df_filtered, x='Date_x', y='Rank',color='player',title = 'Player rank')
     fig.update_yaxes(autorange="reversed")
     st.plotly_chart(fig, use_container_width=True)
 
-    base = pd.read_csv("ATP/df_merged.csv")
+    ########################
+    # PREPARATION FICHIERS 2
+    ########################
     query = f"Winner=='{P1}' & Loser=='{P2}' | Loser=='{P1}' & Winner=='{P2}'"
-
     df_filtered = base.query(query)
-
     df_filtered['BW_L']= df_filtered['B365W']-df_filtered['B365L']
     df_filtered['B3652'] = np.where(df_filtered['B365W'] <= df_filtered['B365L'], 'good', 'ngood')
-
     df_v2 = df_filtered.drop(['Winner',"WRank", 
                         "WPts", 
                         "Wsets",
@@ -128,24 +123,22 @@ def app():
                         'l_bpSaved':'BpSaved',
                         'l_bpFaced':'BpFaced'}, inplace = True)
     df_v4 = pd.concat([df_v1,df_v2])
-
-
     if df_v4.empty:
         st.markdown('## Pas de confrontations entre les joueurs')
     else:
-        ###########
-        # % VICTORY
-        ###########
+        ################
+        # % DE VICTOIRES
+        ################
         st.markdown('## % VICTORY')
         st.markdown('### % VICTORY par tournoi')
-        pro = df_v4.groupby(['player', 'Series','group']).size()
+        pro = df_v4.groupby(['player', 'Tier','group']).size()
         pro = pro.reset_index()
-        pro.columns = ['player', 'Series', 'group', 'value']
-        pro2 = df_v4.groupby(['player', 'Series','group']).sum()
+        pro.columns = ['player', 'Tier', 'group', 'value']
+        pro2 = df_v4.groupby(['player', 'Tier','group']).sum()
         pro2 = pro2.groupby(level=[0, 1]).apply(lambda g: g / g.sum())
         pro2 = pro2.reset_index()
-        pro['percent'] = pro2['ATP']
-        fig = px.pie(pro, values='value', names='group',color='group',facet_col='Series',color_discrete_map={'Winner': 'green','Loser': 'red'})
+        pro['percent'] = pro2['WTA']
+        fig = px.pie(pro, values='value', names='group',color='group',facet_col='Tier',color_discrete_map={'Winner': 'green','Loser': 'red'})
         fig.update_layout(barmode='relative')
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
@@ -157,7 +150,7 @@ def app():
         pro2 = df_v4.groupby(['player', 'Surface','group']).sum()
         pro2 = pro2.groupby(level=[0, 1]).apply(lambda g: g / g.sum())
         pro2 = pro2.reset_index()
-        pro['percent'] = pro2['ATP']
+        pro['percent'] = pro2['WTA']
         fig = px.bar(pro, x="player", y="value", color="group",title="Nombre Victoires par surface", text_auto=True, facet_col="Surface",color_discrete_map={'Winner': 'green','Loser': 'red'})
         fig.update_layout(barmode='relative')
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
@@ -170,26 +163,26 @@ def app():
         pro2 = df_v4.groupby(['player', 'Round','group']).sum()
         pro2 = pro2.groupby(level=[0, 1]).apply(lambda g: g / g.sum())
         pro2 = pro2.reset_index()
-        pro['percent'] = pro2['ATP']
+        pro['percent'] = pro2['WTA']
         fig = px.bar(pro, x="player", y="value", color="group",title="Nombre Victoires par round", text_auto=True, facet_col="Round",color_discrete_map={'Winner': 'green','Loser': 'red'})
         fig.update_layout(barmode='relative')
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
     
-        #########################
-        # % DE REUSSITE BOOKMAKER
-        #########################
+        #######################
+        # % DE REUSSI BOOKMAKER
+        #######################
         st.markdown('## % de réussite bookmaker')
-        pro = df_v4.groupby(['player','Surface','Series', 'B3652','group']).size()
+        pro = df_v4.groupby(['player','Surface','Tier', 'B3652','group']).size()
         pro = pro.reset_index()
-        pro.columns = ['player','Surface','Series', 'B3652', 'group', 'value']
-        pro2 = df_v4.groupby(['player','Surface','Series', 'B3652','group']).sum()
+        pro.columns = ['player','Surface','Tier', 'B3652', 'group', 'value']
+        pro2 = df_v4.groupby(['player','Surface','Tier', 'B3652','group']).sum()
         pro2 = pro2.groupby(level=[0, 1]).apply(lambda g: g / g.sum())
         pro2 = pro2.reset_index()
-        pro['percent'] = pro2['ATP']
+        pro['percent'] = pro2['WTA']
         col = pro.columns
         pro3 = pro.head(len(col))
-        fig = px.pie(pro3, values='value', names='B3652',color='B3652',facet_col='Series',facet_row='Surface',color_discrete_map={'good': 'green','ngood': 'red'})
+        fig = px.pie(pro3, values='value', names='B3652',color='B3652',facet_col='Tier',facet_row='Surface',color_discrete_map={'good': 'green','ngood': 'red'})
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
 
@@ -199,33 +192,35 @@ def app():
         st.markdown('### Five last results')
         df_filtered = base.query(query)
         df_filtered = df_filtered.tail(5)
-        df_filtered = df_filtered.drop(['ATP', 'Court','Tournament','WPts','LPts','Location'],axis=1)
+        df_filtered = df_filtered.drop(['WTA', 'Court','tourney_name','WPts','LPts','Location'],axis=1)
         df_filtered = df_filtered.iloc[: , 1:]
         st.dataframe(df_filtered)
 
-        #############
-        # ODDS MOYENS
-        #############
+        ############
+        # ODDS MOYEN
+        ############
         st.markdown('### Odds moyens')
-        test = df_v4.groupby(['player','Series', 'Surface']).mean()
+        test = df_v4.groupby(['player','Tier', 'Surface']).mean()
         test = test.reset_index()
-        fig = px.bar(test, x="player", y="Odds",title='Odds par series et surface',color='player',facet_col='Series',facet_row='Surface')
+        fig = px.bar(test, x="player", y="Odds",title='Odds par Tier et surface',color='player',facet_col='Tier',facet_row='Surface')
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
 
+
         ################################################
-        # DUREE MOYENNE EN MINUTES PAS SURFACE ET SERIES
+        # DUREE MOYENNE EN MINUTES PAR SURFACE ET Tier
         ################################################
-        st.markdown('### Moyenne durée en Minutes par surface et series')
-        test = df_v4.groupby(['Series', 'Surface']).mean()
+        st.markdown('### Moyenne durée en Minutes par surface et Tier')
+        test = df_v4.groupby(['Tier', 'Surface']).mean()
         test = test.reset_index()
-        fig = px.bar(test, x="Surface", y="minutes",title='Durée match en minutes par series et surface',color='Surface',facet_col='Series')
+        fig = px.bar(test, x="Surface", y="minutes",title='Durée match en minutes par Tier et surface',color='Surface',facet_col='Tier')
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
 
-        ########################
-        # % VICTOIRE PAR SURFACE
-        ########################
+
+        ###########################
+        # % DE VICTOIRE PAR SURFACE
+        ###########################
         st.markdown('### % de victoire par surface')
         test = df_v4.groupby(['player', 'Surface','group']).mean()
         test = test.reset_index()
@@ -240,31 +235,30 @@ def app():
         ################################
         # NOMBRE MOYEN D'ACE PAR SURFACE
         ################################
-        st.markdown('### Moyenne ace par surface')
+        st.markdown("### Nombre moyen d'ace par surface")
         test = df_v4.groupby(['player', 'Surface']).mean()
         test = test.reset_index()
-        fig = px.bar(test, x="player", y="Ace",title="Nombre moyen d'ace par surface",color='player',facet_col='Surface')
+        fig = px.bar(test, x="player", y="Ace",title="Nombre moyen d'ace par surface",color='player',facet_col='Surface',color_discrete_map={'Winner': 'green','Loser': 'red'})
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
-
 
         ############################################
         # NOMBRE MOYEN DE DOUBLES FAUTES PAR SURFACE
         ############################################
-        st.markdown('### Nombre moyen doubles fautes par surface')
+        st.markdown('### Nombre moyens de doubles fautes par surface')
         test = df_v4.groupby(['player', 'Surface','group']).mean()
         test = test.reset_index()
         fig = px.bar(test, x="player", y="Df",title="Nombre moyen doubles fautes par surface",color='group',facet_col='Surface',color_discrete_map={'Winner': 'green','Loser': 'red'})
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
 
-        #############################################
-        # NOMBRE POINTS MOYENS AU SERVICE PAR SURFACE
-        #############################################
-        st.markdown('### Moyenne points au service par surface')
+        ###############################################
+        # NOMBRE MOYEN DE POINTS AU SERVICE PAR SURFACE
+        ###############################################
+        st.markdown('### Nombre moyen de points au service par surface')
         test = df_v4.groupby(['player', 'Surface','group']).mean()
         test = test.reset_index()
-        fig = px.bar(test, x="player", y="Svpt",title="Nombre moyen points sur service par series",color='group',facet_col='Surface',color_discrete_map={'Winner': 'green','Loser': 'red'})
+        fig = px.bar(test, x="player", y="Svpt",title="Nombre moyen points sur service par Tier",color='group',facet_col='Surface',color_discrete_map={'Winner': 'green','Loser': 'red'})
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
 
@@ -310,9 +304,9 @@ def app():
         fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
         st.plotly_chart(fig, use_container_width=True)
 
-        #############################################
-        # NOMBRE DE BALLES DE BREK SAUVES PAR SURFACE
-        #############################################
+        ##############################################
+        # NOMBRE DE BALLES DE BREAK SAUVES PAR SURFACE
+        ##############################################
         st.markdown('### Nombre de balles de break sauvés par surface')
         test = df_v4.groupby(['player', 'Surface','group']).mean()
         test = test.reset_index()

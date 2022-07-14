@@ -19,7 +19,6 @@ def app():
     currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))  
     local_css(os.path.join(currentdir, "style.css"))
     #Préparation de la page
-    from PIL import Image
-    st.markdown('## ATP PREDICTION')
-    image = Image.open('C:/Users/ncebron/tennis_ATP/ATP/data/ATP_Tour.png')
+    st.markdown("# WTA PREDICTION")
+    image = Image.open('C:/Users/ncebron/tennis_ATP/WTA/data/WTA.jpg')
     st.image(image)

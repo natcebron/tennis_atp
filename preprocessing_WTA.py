@@ -39,17 +39,18 @@ def app():
     local_css(os.path.join(currentdir, "style.css"))
     #Préparation de la page
 
-    d_exploration = pd.read_csv("ATP/df_v3.csv")
+    d_exploration = pd.read_csv("WTA/df_v3.csv")
+    base = pd.read_csv("base.csv")
     d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
     d_exploration = d_exploration.sort_values(by='Date_x') 
     d_exploration = d_exploration.iloc[: , 1:]
 
-    series_list = list(d_exploration['Series'].unique())
 
+
+    series_list = list(d_exploration['Tier'].unique())
     player_list = list(d_exploration['player'].unique())
     surface_list = list(d_exploration['Surface'].unique())
     round_list = list(d_exploration['Round'].unique())
-
     col1,col2 = st.columns(2)
     with col1:
         series = st.selectbox(label = "Choose a series", options = series_list)
@@ -60,7 +61,7 @@ def app():
         round2 = st.selectbox(label = "Choose a round", options = round_list)
 
 
-    query = f"Series=='{series}' & player=='{player}'& Surface=='{surface}'& Round=='{round2}'"
+    query = f"Tier=='{series}' & player=='{player}'& Surface=='{surface}'& Round=='{round2}'"
     df_filtered = d_exploration.query(query)
     st.dataframe(df_filtered)
 
