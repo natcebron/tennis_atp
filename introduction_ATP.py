@@ -21,5 +21,5 @@ def app():
     #Préparation de la page
     from PIL import Image
     st.markdown('## ATP PREDICTION')
-    image = Image.open('C:/Users/ncebron/tennis_ATP/ATP/data/ATP_Tour.png')
+    image = Image.open('ATP/data/ATP_Tour.png')
     st.image(image)
