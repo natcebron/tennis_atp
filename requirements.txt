@@ -6,3 +6,4 @@ plotly.express
 xlrd
 openpyxl
 scikit-learn
+streamlit-option-menu
