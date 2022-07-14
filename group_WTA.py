@@ -114,11 +114,11 @@ def app():
     #######
 
     X_train, X_test, y_train, y_test = train_test_split(df, y, test_size = 0.2, random_state = None,shuffle=False)
-    #rfc=RandomForestClassifier(n_estimators=500,max_features="sqrt",max_depth=8,criterion="gini",random_state=42)
-    #rfc.fit(X_train, y_train)
-    #y_pred_test = rfc.predict(X_test)
-    #st.write(accuracy_score(y_test, y_pred_test))
-    #joblib.dump(rfc, "WTA/WTA.joblib")
+    rfc=RandomForestClassifier(n_estimators=500,max_features="sqrt",max_depth=8,criterion="gini",random_state=42)
+    rfc.fit(X_train, y_train)
+    y_pred_test = rfc.predict(X_test)
+    st.write(accuracy_score(y_test, y_pred_test))
+    joblib.dump(rfc, "WTA/WTA.joblib")
     loaded_rf = joblib.load("WTA/WTA.joblib")
 
     test20 = loaded_rf.predict_proba(X_test)
