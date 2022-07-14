@@ -96,8 +96,8 @@ def app():
     d_series = dict(zip(list_of_names, list_of_names2))
 
 
-    a_2022 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/test6.csv',sep=',')
-    a_2021 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/test5.csv',sep=',')
+    a_2022 = pd.read_table('WTA/test6.csv',sep=',')
+    a_2021 = pd.read_table('WTA/test5.csv',sep=',')
 
     data = pd.merge(a_2021, a_2022, on=['player'], how='inner')
 
