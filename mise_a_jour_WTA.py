@@ -233,9 +233,9 @@ def app():
 
     df.to_csv('WTA/df.csv')    
 
-    w_players = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_players.csv',sep=',')
+    w_players = pd.read_table('WTA/data/wta_players.csv',sep=',')
     w_players.rename(columns = {'player_id':'player'}, inplace = True)
-    c_players = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/data/wta_rankings_current.csv',sep=',')
+    c_players = pd.read_table('WTA/data/wta_rankings_current.csv',sep=',')
     c_players.rename(columns = {'player_id':'player'}, inplace = True)
 
     c_players = c_players[c_players['ranking_date'] == 20220627]
