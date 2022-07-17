@@ -178,7 +178,7 @@ def app():
                          "Masters 1000": "3",
                          "Masters Cup": "4",
                          "Grand Slam": "5",
-                         "International":'6'}, inplace=True)
+                         "International":'6','WTA275':'7'}, inplace=True)
 
     odds_3 = pd.read_table('WTA/test5.csv',sep=',')
     test6 = pd.read_table('WTA/test6.csv',sep=',')
