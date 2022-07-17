@@ -229,7 +229,7 @@ def app():
     result = pd.concat([odds_10, test20], axis=1,ignore_index=False)
     result=result.replace({"player_1": inv_map})
     result=result.replace({"player_2": inv_map})
-    result = result.drop(['Surface','Court','Series','Pts_1','Pts_2'],axis=1)
+    #result = result.drop(['Surface','Court','Series','Pts_1','Pts_2'],axis=1)
     result.dropna(inplace = True)
 
     st.dataframe(result)
