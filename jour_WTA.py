@@ -195,7 +195,6 @@ def app():
                          "L": "2",'U':'3'}, inplace=True)
     odds_5["second_hand"].replace({"R": "1",
                          "L": "2",'U':'3'}, inplace=True)
-    odds_10 = odds_5
 
     odds_5=odds_5.replace({"home_player": fruit_dictionary})
     odds_5=odds_5.replace({"away_player": fruit_dictionary})
@@ -217,6 +216,7 @@ def app():
     odds_5 = odds_5.drop(['hand_1','hand_2'],axis=1)
 
     odds_5 = odds_5[['Series','Court','Surface','player_1','player_2','Rank_1','Rank_2','Pts_1','Pts_2','B365_1','B365_2','age_1','age_2']]
+    odds_10 = odds_5
 
     import joblib
 
