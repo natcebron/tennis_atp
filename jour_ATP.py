@@ -161,7 +161,7 @@ def app():
     odds_5['second_hand'] = odds_5['away_player']
     odds_5['second_age'] = odds_5['away_player']
 
-    discard = ["Doubles"]
+    discard = ["Doubles",'Qualifiers']
 
     odds_5 = odds_5[~odds_5.league_name.str.contains('|'.join(discard))]
 
@@ -202,6 +202,7 @@ def app():
 
     fruit_dictionary = dict(zip(list_of_names, lst))
     fruit_dictionary10 = dict(zip(lst, final_list))
+    inv_map = {v: k for k, v in fruit_dictionary.items()}
 
 
 
@@ -250,8 +251,8 @@ def app():
 
     odds30 = odds30.reset_index()
     result = pd.concat([odds30, test20], axis=1,ignore_index=False)
-    result=result.replace({"home_player": fruit_dictionary10})
-    result=result.replace({"away_player": fruit_dictionary10})
+    result=result.replace({"home_player": inv_map})
+    result=result.replace({"away_player": inv_map})
     result = result.drop(['league_name','league_id','first_age','second_age','first_rank','second_rank','category','userName','surface','Court','series', 'Best of','first_Pts','second_Pts','first_hand','second_hand'],axis=1)
     result.dropna(inplace = True)
 
