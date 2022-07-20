@@ -261,7 +261,7 @@ def app():
     TodaysDate = time.strftime("%d/%m/%Y")
     excelfilename = TodaysDate +".xlsx"
 
-    result.to_excel(excelfilename, sheet_name='sheet1', index=False).
+    result.to_excel(excelfilename, sheet_name='sheet1', index=False)
 
     ###############
     # VISUEL PLAYER
