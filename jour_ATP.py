@@ -264,7 +264,7 @@ def app():
 
     label="Download data as CSV",
 
-    data=csv,
+    data=result,
 
     file_name='sample_df.csv',
 
