@@ -259,9 +259,9 @@ def app():
     st.dataframe(result)
     import time
     TodaysDate = time.strftime("%d/%m/%Y")
-    excelfilename = TodaysDate +".xlsx"
+    excelfilename = TodaysDate +".csv"
 
-    result.to_excel(excelfilename, sheet_name='sheet1', index=False)
+    result.to_excel(ATP/data/results/excelfilename, sheet_name='sheet1', index=False)
 
     ###############
     # VISUEL PLAYER
