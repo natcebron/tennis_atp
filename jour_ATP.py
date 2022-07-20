@@ -268,10 +268,7 @@ def app():
 
     file_name='sample_df.csv',
 
-    mime='text/csv',
-
-		)
-		)
+    mime='text/csv'))
     ###############
     # VISUEL PLAYER
     ###############
