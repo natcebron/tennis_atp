@@ -259,8 +259,8 @@ def app():
     st.dataframe(result)
     from datetime import datetime
 
-    date = datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")
-    result.to_csv(f"ATP/data/results/filename_{date}.csv")
+    date = datetime.now().strftime("%Y_%m_%d")
+    result.to_csv(f"filename_{date}.csv")
     ###############
     # VISUEL PLAYER
     ###############
