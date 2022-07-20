@@ -261,6 +261,8 @@ def app():
 
     date = datetime.now().strftime("%Y_%m_%d")
     result.to_csv(f"filename_{date}.csv")
+    st.write(os.getcwd())
+
     ###############
     # VISUEL PLAYER
     ###############
