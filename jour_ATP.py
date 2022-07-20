@@ -260,9 +260,12 @@ def app():
     from datetime import datetime
 
     date = datetime.now().strftime("%Y_%m_%d")
-    result.to_csv("tes.csv")
-    st.write(os.getcwd())
-
+    st.download_button(
+     	label="Download data as CSV",
+     	data=result,
+     	file_name=f'large_df{date}.csv',
+     	mime='text/csv',
+ 	)
     ###############
     # VISUEL PLAYER
     ###############
