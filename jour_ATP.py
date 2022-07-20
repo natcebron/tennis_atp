@@ -260,7 +260,7 @@ def app():
     from datetime import datetime
 
     date = datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")
-    result.to_csv(f"ATP/data/results/filename_{date}")
+    result.to_csv(f"ATP/data/results/filename_{date}.csv")
     ###############
     # VISUEL PLAYER
     ###############
