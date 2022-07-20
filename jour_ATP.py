@@ -260,7 +260,18 @@ def app():
     from datetime import datetime
 
     date = datetime.now().strftime("%Y_%m_%d")
-    st.download_button(label="Download data as CSV",data=result,file_name='result.csv',mime='text/csv')
+    st.download_button( 
+
+    label="Download data as CSV",
+
+    data=csv,
+
+    file_name='sample_df.csv',
+
+    mime='text/csv',
+
+		)
+		)
     ###############
     # VISUEL PLAYER
     ###############
