@@ -255,7 +255,7 @@ def app():
     result=result.replace({"away_player": inv_map})
     result = result.drop(['league_name','league_id','first_age','second_age','first_rank','second_rank','category','userName','surface','Court','series', 'Best of','first_Pts','second_Pts','first_hand','second_hand'],axis=1)
     result.dropna(inplace = True)
-    result.to_csv('ATP/result.csv')  
+    st.dataframe(result)
     ###############
     # VISUEL PLAYER
     ###############
