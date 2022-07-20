@@ -257,12 +257,10 @@ def app():
     result.dropna(inplace = True)
 
     st.dataframe(result)
-    import time
-    TodaysDate = time.strftime("%d/%m/%Y")
-    excelfilename = TodaysDate +".csv"
+    from datetime import datetime
 
-    result.to_excel(f"ATP/data/results/{excelfilename}", index=False)
-
+    date = datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")
+    result.to_csv(f"ATP/data/results/filename_{date}"
     ###############
     # VISUEL PLAYER
     ###############
