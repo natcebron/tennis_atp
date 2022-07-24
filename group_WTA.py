@@ -127,8 +127,8 @@ def app():
     df2 = df2.iloc[-len(X_test):]
 
 
-    odds_3 = pd.read_table('ATP/test5.csv',sep=',')
-    test6 = pd.read_table('ATP/test6.csv',sep=',')
+    odds_3 = pd.read_table('WTA/test5.csv',sep=',')
+    test6 = pd.read_table('WTA/test6.csv',sep=',')
 
     list_of_names = odds_3['player'].to_list()
     list_of_names2 = odds_3['rank_2022'].to_list()
