@@ -46,280 +46,288 @@ def app():
 ####################
 # IMPORTATION DU MODEL 
 ####################
-    df = pd.read_csv("WTA/df.csv")
     df_v3 = pd.read_csv("WTA/df_v3.csv")
-    list_of_names = df['player_1'].to_list()
-    list_of_names2 = df['player_2'].to_list()
+
+    df_merged2 = pd.read_csv("WTA/df.csv")
+    import joblib
+    valeur = 0
+
+    df=df_merged2
+
+
+    df = df.rename(columns={"loser_Rank": "first_rank", 
+                            "loser_Pts": "first_Pts", 
+                            "loser_Sets": "first_sets",
+                            "loser_Odds": "first_odds",
+                            "loser_Hand":"first_hand",
+                            "loser_Age":"first_age",
+                            "loser_Tier":"first_Tier",
+                            'loser_forme':'first_forme',
+                            'loser_Tier_surf':'first_Tier_surf',
+                            'loser_forme_surf':'first_forme_surf',
+
+
+
+                            "winner_Rank": "second_rank", 
+                            "winner_Pts": "second_Pts", 
+                            "winner_Sets": "second_sets",
+                            "winner_Odds": "second_odds",
+                            "winner_Hand":"second_hand",
+                            "winner_Age":"second_age",
+                            "winner_Tier":"second_Tier",
+                            'winner_forme':'second_forme',
+                            'winner_Tier_surf':'second_Tier_surf',
+                            'winner_forme_surf':'second_forme_surf'
+                        },)
+
+    import numpy as np
+    copy_2_df = df.copy()
+    copy_2_df[["first_rank","first_Pts","first_sets","first_odds","first_hand","first_age","first_Tier","first_forme",'first_Tier_surf',
+            'first_forme_surf',
+                            "second_rank","second_Pts","second_sets","second_odds",
+                            "second_hand","second_age","second_Tier",'second_forme','second_Tier_surf','second_forme_surf']]\
+    = copy_2_df[["second_rank","second_Pts","second_sets","second_odds","second_hand","second_age","second_Tier",'second_forme','second_Tier_surf',
+                'second_forme_surf',
+                            "first_rank",
+                            "first_Pts","first_sets","first_odds","first_hand","first_age","first_Tier",'first_forme','first_Tier_surf',
+                            'first_forme_surf']]
+    #shuffle data
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    first_player = []
+    second_player = []
+    labels = []
+
+
+    for winner, looser in zip(df['winner_player'], df['loser_player']):
+        number = np.random.choice([0,1],1)[0] #the number of the winner
+        if number == 1: #the winner is player 0 and the loser is player 1 => label = 0
+            first_player.append(winner)
+            second_player.append(looser)
+
+        else: #the loser is player 0 and the winner is player 1 => label = 1
+            second_player.append(winner)
+            first_player.append(looser)
+
+        labels.append(number)
+    df['first_player_id'] = first_player
+    df['second_player_id'] = second_player
+    df['label'] = labels
+    df = df.sort_values(by=['Date_x_x'])
+    pd.set_option('display.max_rows', 50)  # or 1000
+
+
+
+    winner_player2 = np.zeros(df.shape[0]) # second player wins so label=0
+    df['label'] = winner_player2
+
+
+    winner_player1 = np.ones(copy_2_df.shape[0]) # first player wins so label=1
+    copy_2_df['label'] = winner_player1 
+
+    #df = pd.concat([df,copy_2_df])
+    #shuffle data
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    first_player = []
+    second_player = []
+    labels = []
+
+
+    for winner, looser in zip(df['winner_player'], df['loser_player']):
+        number = np.random.choice([0,1],1)[0] #the number of the winner
+        if number == 1: #the winner is player 0 and the loser is player 1 => label = 0
+            first_player.append(winner)
+            second_player.append(looser)
+
+        else: #the loser is player 0 and the winner is player 1 => label = 1
+            second_player.append(winner)
+            first_player.append(looser)
+
+        labels.append(number)
+    df['first_player_id'] = first_player
+    df['second_player_id'] = second_player
+    df['label'] = labels
+    df = df.sort_values(by=['Date_x_x'])
+
+    df
+    df = df.drop(columns=['winner_player', 'loser_player'])
+    df2 = df
+    df2.to_csv('WTA/df2.csv')
+    df = df.drop(['WTA_y',
+    'Location_y',
+    'Tournament_y',
+    'Date_x_y',
+    'Court_y',
+    'Surface_y',
+    'Round_y',
+    'Best of_y','group_y','group_x'],axis=1)
+
+    df
+    df = df.sort_values(by='Date_x_x') 
+    df["Round_x"].replace({"1st Round": "1",
+                            "2nd Round": "2",
+                            "3rd Round": "3",
+                            "4th Round" : "4",
+                            "Quarterfinals": "5",
+                            "Semifinals": "6",
+                            "The Final": "7",
+                            "Round Robin":"8"}, inplace=True)
+
+    df["Surface_x"].replace({"Clay": "1",
+                            "Grass": "2",
+                            "Hard": "3"}, inplace=True)
+
+    df["Court_x"].replace({"Outdoor": "1",
+                            "Indoor": "2"}, inplace=True)
+
+    df["first_Tier"].replace({"International": "1",
+                            "Premier": "2",
+                            "WTA1000": "3",
+                            "WTA500": "4",
+                            "Grand Slam": "5",
+                            "WTA250":'6',
+                    "Tour Championships":"7"}, inplace=True)
+    df = df.drop(df[(df['first_Tier'] == 'WTA251') | (df['first_Tier'] == 'WTA252')| (df['first_Tier'] == 'WTA254') | (df['first_Tier'] == 'WTA255')| (df['first_Tier'] == 'WTA256')| (df['first_Tier'] == 'WTA258')| (df['first_Tier'] == 'WTA259')| (df['first_Tier'] == 'WTA261')| (df['first_Tier'] == 'WTA263')| (df['first_Tier'] == 'WTA264')| (df['first_Tier'] == 'WTA265')| (df['first_Tier'] == 'WTA266')| (df['first_Tier'] == 'WTA268')| (df['first_Tier'] == 'WTA269')| (df['first_Tier'] == 'WTA271')| (df['first_Tier'] == 'WTA272')| (df['first_Tier'] == 'WTA273')| (df['first_Tier'] == 'WTA275')].index)
+
+    df = df.drop(['match_id','WTA_x', 'Location_x','Tournament_x','Date_x_x','second_sets','second_Tier'],axis=1)
+    df = df.dropna(subset=['first_Tier', 'first_forme'])
+    df["first_hand"].replace({"R": "1",
+                            "L": "2",'U':'3'}, inplace=True)
+    df["second_hand"].replace({"R": "1",
+                            "L": "2",'U':'3'}, inplace=True)
+
+
+
+    list_of_names = df['first_player_id'].to_list()
+    list_of_names2 = df['second_player_id'].to_list()
     final_list = list_of_names + list_of_names2
     final_list = list(dict.fromkeys(final_list))
 
     lst = list(range(0,len(final_list)))
     fruit_dictionary = dict(zip(final_list, lst))
 
-    df = df.sort_values(by='Date_x') 
-    df = df.drop(df[(df['Tier'] == 'WTA251') | (df['Tier'] == 'WTA252')| (df['Tier'] == 'WTA254') | (df['Tier'] == 'WTA255')| (df['Tier'] == 'WTA256')| (df['Tier'] == 'WTA258')| (df['Tier'] == 'WTA259')| (df['Tier'] == 'WTA261')| (df['Tier'] == 'WTA263')| (df['Tier'] == 'WTA264')| (df['Tier'] == 'WTA265')| (df['Tier'] == 'WTA266')| (df['Tier'] == 'WTA268')| (df['Tier'] == 'WTA269')| (df['Tier'] == 'WTA271')| (df['Tier'] == 'WTA272')| (df['Tier'] == 'WTA273')| (df['Tier'] == 'WTA275')].index)
-
-
-    df["Surface"].replace({"Clay": "1",
-                         "Grass": "2",
-                         "Hard": "3"}, inplace=True)
-
-    df["Court"].replace({"Outdoor": "1",
-                         "Indoor": "2"}, inplace=True)
-
-    df["Tier"].replace({"International": "1",
-                         "Premier": "2",
-                         "WTA1000": "3",
-                         "WTA500": "4",
-                         "Grand Slam": "5",
-                           "WTA250":'6',
-                   "Tour Championships":"7"}, inplace=True)
-    #df = df.drop(['WTA', 'Location','Tournament','Date_x','second_sets','first_sets','score','minutes','second_ace',
-    #          'second_df','second_svpt','second_1stIn','second_1stWon','second_2ndWon','second_SvGms','second_bpSaved',
-    #         'second_bpFaced','first_ace','first_df','first_svpt','first_1stIn','first_1stWon','first_2ndWon','first_SvGms',
-    #          'first_bpSaved','first_bpFaced','Surface','Round'],axis=1)
-
-    df["hand_1"].replace({"R": "1",
-                         "L": "2",'U':'3'}, inplace=True)
-    df["hand_2"].replace({"R": "1",
-                         "L": "2",'U':'3'}, inplace=True)
-    list_of_names = df['player_1'].to_list()
-    list_of_names2 = df['player_2'].to_list()
-    final_list = list_of_names + list_of_names2
-    final_list = list(dict.fromkeys(final_list))
-
-    lst = list(range(0,len(final_list)))
-    fruit_dictionary = dict(zip(final_list, lst))
-
-    df=df.replace({"player_1": fruit_dictionary})
-    df=df.replace({"player_2": fruit_dictionary})
-
-
-    df = df.drop(df[(df['surface'] == 'Carpet')].index)
-
+    df=df.replace({"first_player_id": fruit_dictionary})
+    df=df.replace({"second_player_id": fruit_dictionary})
+    df = df.dropna()
     df=df.dropna(axis=0)
+    y = df.label
+    df.drop(['label','Round_x','tourney_name_x','Best of_x','tourney_name_y','first_sets'], axis=1,inplace=True)
     df = df.iloc[: , 1:]
-    df2 = df.copy()
 
-    y = df.target
-    df.drop(['target'], axis=1,inplace=True)
-    #df.drop(['first_age','second_age'], axis=1,inplace=True)
-    df.drop(['hand_1','hand_2','Round'], axis=1,inplace=True)
-    df.drop(['Best of','Date_x','tourney_name','Location','sets_1','sets_2','surface','score','minutes'], axis=1,inplace=True)
-    df = df.drop(['1_ace','1_df','1_svpt','1_1stIn','1_1stWon','1_2ndWon','1_SvGms','1_bpSaved','1_bpFaced','2_ace','2_df','2_svpt','2_1stIn','2_1stWon',
-    '2_2ndWon','2_SvGms','2_bpSaved','2_bpFaced','WTA'],axis=1)
+        #df2.drop(['player_1','player_2'], axis=1,inplace=True)
 
-    #######
-    # MODEL
-    #######
+
+    from sklearn.model_selection import train_test_split
 
     X_train, X_test, y_train, y_test = train_test_split(df, y, test_size = 0.2, random_state = None,shuffle=False)
-    rfc=RandomForestClassifier(n_estimators=500,max_features="sqrt",max_depth=8,criterion="gini",random_state=42)
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+    from sklearn.ensemble import RandomForestClassifier
+
+    rfc=RandomForestClassifier(n_estimators=500,max_features="auto",max_depth=8,criterion="gini",random_state=42)
     rfc.fit(X_train, y_train)
     y_pred_test = rfc.predict(X_test)
+    valeur = accuracy_score(y_test, y_pred_test)
     st.write(accuracy_score(y_test, y_pred_test))
+    data = df
+        
+    valeur = accuracy_score(y_test, y_pred_test)
+    valeur2 = accuracy_score(y_test, y_pred_test)
+
+    data = df
+    rfc2 = rfc
     joblib.dump(rfc, "WTA/WTA.joblib")
+
+
+    #st.write(valeur2)
+    
     loaded_rf = joblib.load("WTA/WTA.joblib")
 
-    test20 = loaded_rf.predict_proba(X_test)
+    loaded_rf.fit(X_train, y_train)
+    test30 = df2.copy()
+
+    test20 = rfc.predict_proba(X_test)
     test20=pd.DataFrame(test20)
-    test20.columns = ['prono_1', 'prono_2']
-    df2 = df2.iloc[-len(X_test):]
+    test20.columns = ['player_1','player_2']
+    test30 = test30.iloc[-len(X_test):]
+    test30 = test30.reset_index()
+
+    result = pd.concat([ test20,test30], axis=1,ignore_index=False)
+    result = result[['Surface_x','player_1','player_2','Date_x_x','first_player_id','second_player_id','second_forme','first_forme','second_odds','first_odds','label']]
+    result['points'] = np.where( ( ((result['label'] == 1) & (result['player_1'] > 0.5 )) | ((result['label'] == 0) & (result['player_2'] > 0.5))), 'bp', 'mp')
 
 
-    odds_3 = pd.read_table('WTA/test5.csv',sep=',')
-    test6 = pd.read_table('WTA/test6.csv',sep=',')
-
-    list_of_names = odds_3['player'].to_list()
-    list_of_names2 = odds_3['rank_2022'].to_list()
-    final_list = list(dict.fromkeys(list_of_names))
-    lst = list(range(0,len(final_list)))
-
-    fruit_dictionary = dict(zip(list_of_names, lst))
-    fruit_dictionary10 = dict(zip(lst, final_list))
-    df2 = df2.reset_index()
-
-    result = pd.concat([ test20,df2], axis=1,ignore_index=False)
-    result=result.replace({"player_1": fruit_dictionary10})
-    result=result.replace({"player_2": fruit_dictionary10})
-
-        #result = result.drop(['league_name','league_id','first_age','second_age','first_rank','second_rank','category','userName','surface','Court','series', 'Best of','first_Pts','second_Pts','first_hand','second_hand'],axis=1)
-    result = result[['player_1','player_2','target','prono_1','prono_2','B365_1','B365_2']]
+    conditions  = [ (result['player_1'] > result['player_2']) , (result['player_2'] > result['player_1'])]
+    choices     = [ result['first_odds'], result['second_odds'] ]
+        
+    result["choice"] = np.select(conditions, choices, default=np.nan)
     m=10
-    result['diff'] = result['prono_1'] - result['prono_2']
+    result['ROI'] = np.where(result['points'] == 'bp', (result['choice']*m-10), (result['choice']*-m-10))
+    result.loc[result['ROI'] < 1, 'ROI'] = -10
 
-    result['points'] = np.where( ( (result['target'] == 1) & (result['prono_1'] > result['prono_2'] ) ) | ( (result['target'] == 2) & (result['prono_1'] < result['prono_2'] ) ) , 'bp', 'mp')
-    result['choice'] = np.where(result['prono_1'] >= result['prono_2'], result['B365_1'], result['B365_2'])
-    result['ROI'] = np.where(result['points'] == 'bp', (result['choice']*m), (result['choice']*-m))
-    result.loc[result['ROI'] < 10, 'ROI'] = -10
-    rslt_df = result[(result['diff'] > 0.5) |
-          (result['diff'] < -0.5)]
-    from datetime import date
     from datetime import datetime
-    st.dataframe(result)
-
 
     def diff_month(d1, d2):
-        return (d2.year - d1.year) * 12 + d2.month - d1.month   
-    month2 = diff_month(datetime(2019,8,7), datetime(2022,6,24))
+            return (d2.year - d1.year) * 12 + d2.month - d1.month   
+    month2 = diff_month(datetime(2020,2,24), datetime(2022,7,24))
 
 
-    # initialize list of lists
-    data = [['ROI global', result['ROI'].sum(),len(result['ROI']),result['ROI'].sum()/len(result['ROI']),result['ROI'].sum()/month2],
-            ['ROI select (diff cote >0.5)', rslt_df['ROI'].sum(),len(rslt_df['ROI']),rslt_df['ROI'].sum()/len(rslt_df['ROI']),rslt_df['ROI'].sum()/month2]]
-    # Create the pandas DataFrame
-    st.markdown('Gain pour une mise de 10 euros par match')
+        # initialize list of lists
+    data = [['ROI global', result['ROI'].sum(),len(result['ROI']),result['ROI'].sum()/len(result['ROI']),result['ROI'].sum()/month2]]
+        # Create the pandas DataFrame
+    print('Gain pour une mise de 10 euros par match')
 
     d_ROI = pd.DataFrame(data, columns=['ROI', 'Somme','Nb match','ROI par match','Gain par mois'])
     d_ROI['month'] = month2
-    # print dataframe.
-    st.dataframe(d_ROI)
+        # print dataframe.
+    d_ROI
+
+    pd.set_option('display.max_rows', 5)  # or 1000
+
+    import numpy as np
+    df_v1 = result.drop(['first_player_id','first_forme','player_1'],axis=1)
+    df_v1['group'] = 'second'
+    df_v2 = result.drop(['second_player_id','second_forme','player_2'],axis=1)
+    df_v2['group'] = 'first'
+
+    df_v2.rename(columns = {'first_player_id':'player',
+
+                            'first_forme':'forme','player_1':'player_prono'}, inplace = True)
+
+    df_v1.rename(columns = {'second_player_id':'player',
+
+                            'second_forme':'forme','player_2':'player_prono'}, inplace = True)
 
 
-    ############
-    # PREDICTION
-    ############
-    st.markdown('## PREDICTION')
-    df_v3 = pd.read_csv("WTA/df_v3.csv")
-    df_v3['Date_x'] = pd.to_datetime(df_v3['Date_x'])
-    df_v3 = df_v3.sort_values(by='Date_x') 
-    P1_list = list(df_v3['player'].unique())
-    P2_list = list(df_v3['Round'].unique())
-    P3_list = list(df_v3['Surface'].unique())
-    P4_list = list(df_v3['Tier'].unique())
-    P5_list = list(df_v3['Court'].unique())
-    P6_list = list(df_v3['tourney_name'].unique())
+    df_v10 = pd.concat([df_v1,df_v2])
+    df_v10 = df_v10.reset_index()
 
-    col1,col2,col3 = st.columns(3)
-    with col1:
-        P1 = st.selectbox(label = "Player 1", options = P1_list)
-        player_1_B365 = st.text_input('player_1_B365')
-        P6 = st.selectbox(label = "Court", options = P5_list)
+    df_v10 = df_v10.sort_values(by='index') 
+    df_v10 = df_v10.sort_values(by='ROI') 
+    df_v10 = df_v10.dropna()
+    import plotly.express as px
+    df_v10["ROI"]=df_v10["ROI"].apply(int)
+    test = df_v10.groupby(['player']).sum()
+    pro2 = df_v10.groupby(['player']).sum()
+    df_v10.to_csv('WTA/df_v10.csv')
 
-    with col2:
-        P2 = st.selectbox(label = "Player 2", options = P1_list)
-        player_2_B365 = st.text_input('player_2_B365')
-        # P7 = st.selectbox(label = "Tournament", options = P6_list)
+    test = test.reset_index()
 
-    with col3:
-        P3 = st.selectbox(label = "Round", options = P2_list)
-        P4 = st.selectbox(label = "Surface", options = P3_list)
-        P5 = st.selectbox(label = "Tier", options = P4_list)
+    pro2 = pro2.groupby(level=[0]).apply(lambda g: g / g.sum())
+    pro2 = pro2.reset_index()
+    test['percent'] = pro2['index']
+    test = test.sort_values(by='ROI', ascending=False)
 
-    with st.form(key='my_form_to_submit'):
+    st.markdown('## Top player ROI')
+    top10_ROI = test[:10]
+    st.dataframe(top10_ROI)
 
-        submit_button = st.form_submit_button(label='Submit')
-    if submit_button:
-
-
-        dfv4 = df_v3[['tourney_name', 'WTA']] 
-        dict2 = dfv4.set_index('tourney_name').to_dict()['WTA']
-
-
-        data = [{'Tier':P5,
-                'Court':P6,
-                'Bestof':P5,
-                'player_1':P1,
-                '1_hand':P1,
-                'Pts_1':P1,
-                'Rank_1':P1,
-                'age_1':P1,
-                'B365_1':player_1_B365,
-                'B365_2':player_2_B365,
-                'Surface':P4,
-                '2_hand':P2,
-                'age_2':P2,
-                'player_2':P2,
-                'Rank_2':P2,
-                'Pts_2':P2
-                }]
-        
-        dataf = pd.DataFrame(data)
-        dataf['Bestof'] = np.where(dataf['Tier']=="Grand Slam", '5', '3')
-        dataf=dataf.replace({"Tournament": dict2})
-
-
-        dataf["Surface"].replace({"Clay": "1",
-                         "Grass": "2",
-                         "Hard": "3"}, inplace=True)
-
-        dataf["Court"].replace({"Outdoor": "1",
-                         "Indoor": "2"}, inplace=True)
-
-        dataf["Tier"].replace({"WTA250": "1",
-                         "WTA500": "2",
-                         "Masters 1000": "3",
-                         "Masters Cup": "4",
-                         "Grand Slam": "5",
-                         "International":'6'}, inplace=True)
-
-        concatenated = pd.read_csv("WTA/df.csv")
-        list_of_names = concatenated['player_1'].to_list()
-        list_of_names2 = concatenated['player_2'].to_list()
-        final_list = list_of_names + list_of_names2
-        final_list = list(dict.fromkeys(final_list))
-
-        lst = list(range(0,len(final_list)))
-        fruit_dictionary = dict(zip(final_list, lst))
-
-        dataf=dataf.replace({"player_1": fruit_dictionary})
-        dataf=dataf.replace({"player_2": fruit_dictionary})
-
-
-        test5 = pd.read_csv("WTA/test5.csv")
-        test6 = pd.read_csv("WTA/test6.csv")
-
-        list_of_names = test5['player'].to_list()
-        list_of_names2 = test5['rank_2022'].to_list()
-        final_list = list(dict.fromkeys(list_of_names))
-
-        fruit_dictionary10 = dict(zip(final_list, list_of_names2))
-        dataf=dataf.replace({"Rank_1": fruit_dictionary10})
-        dataf=dataf.replace({"Rank_2": fruit_dictionary10})
-        #dataf = dataf.drop(['player_1_B365', 'player_2_B365'],axis=1)
-
-        list_of_names5 = test5['points'].to_list()
-        final_list = list(dict.fromkeys(list_of_names))
-
-        fruit_dictionary11 = dict(zip(final_list, list_of_names5))
-        dataf=dataf.replace({"Pts_1": fruit_dictionary11})
-        dataf=dataf.replace({"Pts_2": fruit_dictionary11})
-
-        list_of_names5 = test5['hand'].to_list()
-        fruit_dictionary11 = dict(zip(final_list, list_of_names5))
-        dataf=dataf.replace({"1_hand": fruit_dictionary11})
-        dataf=dataf.replace({"2_hand": fruit_dictionary11})
-
-
-        list_of_names5 = test6['Age'].to_list()
-        list_of_names = test6['player'].to_list()
-
-        final_list = list(dict.fromkeys(list_of_names))
-
-        fruit_dictionary11 = dict(zip(final_list, list_of_names5))
-
-        dataf["1_hand"].replace({"R": "1",
-                         "L": "2",'U':'3'}, inplace=True)
-        dataf["2_hand"].replace({"R": "1",
-                         "L": "2",'U':'3'}, inplace=True)
-        dataf=dataf.replace({"age_1": fruit_dictionary11})
-        dataf=dataf.replace({"age_2": fruit_dictionary11})
-        dataf.drop(['1_hand','2_hand','Bestof'], axis=1,inplace=True)
-        dataf = dataf[['Tier','Court','Surface','player_1','player_2','Rank_1','Rank_2','Pts_1','Pts_2','B365_1','B365_2','age_1','age_2']]
-        st.dataframe(dataf)
-
-
-        if loaded_rf.predict_proba(dataf)[:,0]>0.5:
-            st.markdown('### Player 1 gagnant')
-            st.write(loaded_rf.predict_proba(dataf)[:,0])
-
-        else:
-            st.markdown('### Player 2 gagnant')
-            st.write(loaded_rf.predict_proba(dataf)[:,1])
-
-
-
-
-
+    fig = px.bar(top10_ROI, x="ROI", y="player",title="Top10 par player",color='player')
+    fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[1]))
+    fig.update_layout(
+        autosize=False,
+        width=1000,
+        height=1000,barmode='relative')
+    st.plotly_chart(fig)
 
 

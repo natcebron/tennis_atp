@@ -13,6 +13,7 @@ from PIL import Image, ImageStat
 import matplotlib.image as mpimg
 from tensorflow.keras.models import  load_model
 import tensorflow as tf
+import graphs_bokeh
 import plotly.express as px
 
 
@@ -52,7 +53,7 @@ def app():
     fig.update_yaxes(autorange="reversed")
     st.plotly_chart(fig, use_container_width=True)
 
-    base = pd.read_csv("ATP/df_merged.csv")
+    base = pd.read_csv("ATP/df_versus.csv")
     query = f"Winner=='{P1}' & Loser=='{P2}' | Loser=='{P1}' & Winner=='{P2}'"
 
     df_filtered = base.query(query)

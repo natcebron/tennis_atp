@@ -13,6 +13,7 @@ from PIL import Image, ImageStat
 import matplotlib.image as mpimg
 from tensorflow.keras.models import  load_model
 import tensorflow as tf
+import graphs_bokeh
 import plotly.express as px
 
 
@@ -29,7 +30,7 @@ def app():
     ##########################
     # IMPORTATION DES FICHIERS
     ##########################
-    base = pd.read_csv("WTA/df_merged.csv")
+    base = pd.read_csv("WTA/df_versus.csv")
     d_exploration = pd.read_csv("WTA/df_v3.csv")
     d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
     d_exploration = d_exploration.sort_values(by='Date_x') 
@@ -191,7 +192,7 @@ def app():
         st.markdown('### Five last results')
         df_filtered = base.query(query)
         df_filtered = df_filtered.tail(5)
-        df_filtered = df_filtered.drop(['WTA', 'Court','tourney_name','WPts','LPts','Location'],axis=1)
+        df_filtered = df_filtered.drop(['WTA', 'Court','WPts','LPts','Location'],axis=1)
         df_filtered = df_filtered.iloc[: , 1:]
         st.dataframe(df_filtered)
 

@@ -26,7 +26,7 @@ def app():
     ##########################
     # IMPORTATION DES FICHIERS
     ##########################
-    base = pd.read_csv("WTA/df_merged.csv")
+    base = pd.read_csv("WTA/df_versus.csv")
     d_exploration = pd.read_csv("WTA/df_v3.csv")
     d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
     d_exploration = d_exploration.sort_values(by='Date_x') 

@@ -31,7 +31,7 @@ def app():
     ##########################
     concatenated = pd.read_csv("ATP/df_merged.csv")
     d_exploration = pd.read_csv("ATP/df_v3.csv")
-    base = pd.read_csv("ATP/df_merged.csv")
+    base = pd.read_csv("ATP/df_versus.csv")
     d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
     d_exploration = d_exploration.sort_values(by='Date_x') 
 
@@ -54,8 +54,8 @@ def app():
     # LISTE DES ADVERSAIRES
     #######################
     st.markdown('## Liste des adversaires')
-    list_of_names = df_filtered2['Loser'].to_list()
-    list_of_names2 = df_filtered2['Winner'].to_list()
+    list_of_names = df_filtered2['Winner'].to_list()
+    list_of_names2 = df_filtered2['Loser'].to_list()
     final_list = list_of_names + list_of_names2
     adv = pd.DataFrame(final_list)
     adv.columns = ['test']
