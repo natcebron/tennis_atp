@@ -30,7 +30,7 @@ def app():
     ##########################
     # PREPARATION DES FICHIERS
     ##########################
-    concatenated = pd.read_csv("ATP/df_merged.csv")
+    concatenated = pd.read_csv("ATP/df_versus.csv")
     df_v3 = pd.read_csv("ATP/df_v3.csv")
     df_v3['Date_x'] = pd.to_datetime(df_v3['Date_x'])
     df_v3 = df_v3.sort_values(by='Date_x') 
