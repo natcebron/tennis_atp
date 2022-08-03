@@ -217,7 +217,7 @@ def app():
                          "Grand Slam": "5",
                          "International":'6','WTA275':"7"}, inplace=True)
 
-    odds_3 = pd.read_table('WTA/test5.csv',sep=',')
+    odds_3 = pd.read_table('WTA/wta_p.csv',sep=',')
     test6 = pd.read_table('WTA/test6.csv',sep=',')
 
     list_of_names = odds_3['player'].to_list()
