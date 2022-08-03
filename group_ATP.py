@@ -217,7 +217,6 @@ def app():
 
 
     from sklearn.model_selection import train_test_split
-    st.dataframe(df)
     X_train, X_test, y_train, y_test = train_test_split(df, y, test_size = 0.2, random_state = None,shuffle=False)
     from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
     from sklearn.ensemble import RandomForestClassifier
@@ -338,7 +337,6 @@ def app():
     list_1 = list(test2['player'])
     list_2 = list(test2['percent'])
     fruit_dictionary = dict(zip(list_1, list_2))
-    st.write(fruit_dictionary)
 
    
 
