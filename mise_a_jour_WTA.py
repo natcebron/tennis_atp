@@ -47,21 +47,21 @@ def app():
                             'L3','L2','L1','W3','W2','W1',],axis=1)
     dataset1
 
-    a_2010 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2010.csv',sep=',')
-    a_2011 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2011.csv',sep=',')
-    a_2012 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2012.csv',sep=',')
-    a_2013 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2013.csv',sep=',')
-    a_2014 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2014.csv',sep=',')
+    a_2010 = pd.read_table('WTA/wta_matches_2010.csv',sep=',')
+    a_2011 = pd.read_table('WTA/wta_matches_2011.csv',sep=',')
+    a_2012 = pd.read_table('WTA/wta_matches_2012.csv',sep=',')
+    a_2013 = pd.read_table('WTA/wta_matches_2013.csv',sep=',')
+    a_2014 = pd.read_table('WTA/wta_matches_2014.csv',sep=',')
 
-    a_2015 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2015.csv',sep=',')
-    a_2016 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2016.csv',sep=',')
-    a_2017 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2017.csv',sep=',')
-    a_2018 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2018.csv',sep=',')
+    a_2015 = pd.read_table('WTA/wta_matches_2015.csv',sep=',')
+    a_2016 = pd.read_table('WTA/wta_matches_2016.csv',sep=',')
+    a_2017 = pd.read_table('WTA/wta_matches_2017.csv',sep=',')
+    a_2018 = pd.read_table('WTA/wta_matches_2018.csv',sep=',')
 
-    a_2019 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2019.csv',sep=',')
-    a_2020 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2020.csv',sep=',')
-    a_2021 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2021.csv',sep=',')
-    a_2022 = pd.read_table('C:/Users/ncebron/Downloads/tennis_wta-master/wta_matches_2022.csv',sep=',')
+    a_2019 = pd.read_table('WTA/wta_matches_2019.csv',sep=',')
+    a_2020 = pd.read_table('WTA/wta_matches_2020.csv',sep=',')
+    a_2021 = pd.read_table('WTA/wta_matches_2021.csv',sep=',')
+    a_2022 = pd.read_table('WTA/wta_matches_2022.csv',sep=',')
 
     dataset2 = pd.concat([a_2010,a_2011,a_2012,a_2013,a_2014,a_2015,a_2016,a_2017,a_2018,a_2019,a_2020,a_2021, a_2022])
     dataset2
@@ -94,10 +94,8 @@ def app():
     dataset2['Loser'] = dataset2['Loser'].str.replace('-',' ')
     dataset2['Winner'] = dataset2['Winner'].str.replace('-',' ')
 
-    df_cd1 = dataset1[dataset1['Winner'].isin(['Nadal R.']) ]
 
 
-    list_of_names4 = df_cd1['Loser'].to_list()
     list_of_names = dataset2['Winner'].to_list()
     list_of_names2 = dataset2['Loser'].to_list()
     list_of_names3 = dataset1['Winner'].to_list()
