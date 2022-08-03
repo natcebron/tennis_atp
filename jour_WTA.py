@@ -102,7 +102,7 @@ def app():
 
 
     a_2022 = pd.read_table('WTA/test6.csv',sep=',')
-    a_2021 = pd.read_table('WTA/test5.csv',sep=',')
+    a_2021 = pd.read_table('WTA/wta_p.csv',sep=',')
 
     data = pd.merge(a_2021, a_2022, on=['player'], how='inner')
 
