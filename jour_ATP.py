@@ -1,4 +1,5 @@
 import streamlit as st
+import warnings
 import streamlit.components.v1 as components
 import os                      #+Deployment
 import inspect                 #+Deployment
@@ -35,6 +36,7 @@ def app():
     #Préparation de la page
     st.markdown(""" <style> .font {font-size:16px ; font-family: 'Arial'; color: #FFFFFF;} </style> """, unsafe_allow_html=True)
     st.markdown("# PRONOSTIC DU JOUR")
+    warnings.simplefilter(action='ignore', category=FutureWarning)
 
     ######################
     # IMPORTATION DES ODDS
