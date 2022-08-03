@@ -285,7 +285,6 @@ def app():
     # PREDICTION
     ############
     import joblib
-    test = pd.read_table('df_model.csv',sep=',')
 
     loaded_rf = joblib.load("ATP/ATP.joblib")
     test20 = loaded_rf.predict_proba(odds_5)
