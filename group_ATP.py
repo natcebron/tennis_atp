@@ -211,7 +211,7 @@ def app():
 
     df=df.dropna(axis=0)
     y = df.label
-    df.drop(['label'], axis=1,inplace=True)
+    df.drop(['label','tourney_name_x','tourney_name_y'], axis=1,inplace=True)
         #df2.drop(['player_1','player_2'], axis=1,inplace=True)
 
 
