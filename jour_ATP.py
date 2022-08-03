@@ -89,7 +89,7 @@ def app():
     odds_5["home_player"] = odds_5['last_name_home'] +" "+ odds_5["first_name_home"]+"."
     odds_5['first_name_away'] = odds_5['first_name_away'].str.split('').str[1]
     odds_5["away_player"] = odds_5['last_name_away'] +" "+ odds_5["first_name_away"]+"."
-    df_merged = pd.read_csv("C:/Users/ncebron/tennis_ATP/ATP/df_versus.csv")
+    df_merged = pd.read_csv("ATP/df_versus.csv")
 
     odds_5 = odds_5.drop(['last_name_home','last_name_away','first_name_home','first_name_away'],axis=1)
     odds_5["category"] = odds_5['league_name'].str.split(' ').str[0]
@@ -107,8 +107,8 @@ def app():
     d_series = dict(zip(list_of_names, list_of_names2))
 
 
-    a_2022 = pd.read_table('C:/Users/ncebron/tennis_ATP/test6.csv',sep=',')
-    a_2021 = pd.read_table('C:/Users/ncebron/tennis_ATP/test5.csv',sep=',')
+    a_2022 = pd.read_table('ATP/test6.csv',sep=',')
+    a_2021 = pd.read_table('ATP/test5.csv',sep=',')
 
     data = pd.merge(a_2021, a_2022, on=['player'], how='inner')
     list_of_names5 = data['Age'].to_list()
@@ -136,7 +136,7 @@ def app():
 
     odds_5=odds_5.dropna(axis=0)
     odds_5 = odds_5[odds_5['category']=='ATP' ]
-    df_v4 = pd.read_table('C:/Users/ncebron/tennis_ATP/ATP/df_v4.csv',sep=',')
+    df_v4 = pd.read_table('ATP/df_v4.csv',sep=',')
     df_v4 = df_v4.groupby("player").last()
     df_v4 = df_v4.reset_index()
     series_1 = df_v4.set_index('player').to_dict()['series']
@@ -225,8 +225,8 @@ def app():
 
 
 
-    odds_3 = pd.read_table('C:/Users/ncebron/tennis_ATP/ATP/test5.csv',sep=',')
-    test6 = pd.read_table('C:/Users/ncebron/tennis_ATP/ATP/test6.csv',sep=',')
+    odds_3 = pd.read_table('ATP/test5.csv',sep=',')
+    test6 = pd.read_table('ATP/test6.csv',sep=',')
 
     list_of_names = odds_3['player'].to_list()
     list_of_names2 = odds_3['rank_2022'].to_list()
@@ -297,7 +297,7 @@ def app():
     result = pd.concat([odds10, test20], axis=1,ignore_index=False)
     result=result.replace({"player_1": inv_map})
     result=result.replace({"player_2": inv_map})
-    df_v10 = pd.read_csv("C:/Users/ncebron/tennis_ATP/ATP/df_v10.csv")
+    df_v10 = pd.read_csv("ATP/df_v10.csv")
 
     df_v10["ROI"]=df_v10["ROI"].apply(int)
     test = df_v10.groupby(['player','points']).sum()
@@ -323,7 +323,7 @@ def app():
     result['%_bp_player_2'] = pd.to_numeric(result['%_bp_player_2'], errors = 'coerce')
     
     
-    df2 = pd.read_csv('C:/Users/ncebron/tennis_ATP/ATP/df2.csv')
+    df2 = pd.read_csv('ATP/df2.csv')
 
     df2["group"] = df2["first_player_id"] +' '+ df2["second_player_id"]
     df2['value'] = 1
