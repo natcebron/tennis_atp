@@ -275,7 +275,7 @@ def app():
     result = pd.concat([odds10, test20], axis=1,ignore_index=False)
     result=result.replace({"player_1": inv_map})
     result=result.replace({"player_2": inv_map})
-    df_v10 = pd.read_csv("C:/Users/ncebron/tennis_ATP/WTA/df_v10.csv")
+    df_v10 = pd.read_csv("WTA/df_v10.csv")
 
     df_v10["ROI"]=df_v10["ROI"].apply(int)
     test = df_v10.groupby(['player','points']).sum()
