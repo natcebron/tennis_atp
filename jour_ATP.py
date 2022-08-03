@@ -69,7 +69,7 @@ def app():
 
     odds_5 = pd.concat([odds_1,odds_4],axis=1)
     st.dataframe(odds_5)
-    if len(odds_5.columns)=12:
+    if len(odds_5.columns)==12:
     	odds_5.drop(odds_5.columns[len(odds_5.columns)-1], axis=1, inplace=True)
 
 
