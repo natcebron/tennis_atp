@@ -64,7 +64,8 @@ def app():
     odds_4 = odds_4['money_line'].apply(pd.Series)
 
     odds_5 = pd.concat([odds_1,odds_4],axis=1)
-    st.dataframe(odds_5)
+    if len(odds_5.columns)==12:
+    	odds_5.drop(odds_5.columns[len(odds_5.columns)-1], axis=1, inplace=True)
     odds_5 = odds_5.drop(['resulting_unit','periods','draw','period_results'],axis=1)
     odds_5.columns = ['league_id', 'league_name', 'starts', 'home_player','away_player','home_odds','away_odds']
     #odds_5.columns = ['league_id', 'league_name', 'starts', 'home_player','away_player','t','away_odds','home_odds']
