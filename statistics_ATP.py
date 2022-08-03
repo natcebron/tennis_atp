@@ -29,7 +29,7 @@ def app():
     ##########################
     # IMPORTATION DES FICHIERS
     ##########################
-    concatenated = pd.read_csv("ATP/df_merged.csv")
+    concatenated = pd.read_csv("ATP/df_versus.csv")
     d_exploration = pd.read_csv("ATP/df_v3.csv")
     base = pd.read_csv("ATP/df_versus.csv")
     d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
