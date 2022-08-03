@@ -135,7 +135,7 @@ def app():
     odds_5=odds_5.dropna(axis=0)
     odds_5 = odds_5[odds_5['category']=='WTA' ]
 
-    df_v4 = pd.read_table('C:/Users/ncebron/tennis_ATP/WTA/df_v4.csv',sep=',')
+    df_v4 = pd.read_table('WTA/df_v4.csv',sep=',')
     df_v4 = df_v4.groupby("player").last()
     df_v4 = df_v4.reset_index()
     series_1 = df_v4.set_index('player').to_dict()['series_2']
