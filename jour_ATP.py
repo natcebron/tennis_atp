@@ -66,6 +66,7 @@ def app():
     odds_4 = odds_4['money_line'].apply(pd.Series)
 
     odds_5 = pd.concat([odds_1,odds_4],axis=1)
+    st.dataframe(odds_5)
     #if '0' in df.columns:
     odds_5 = odds_5.drop(['0'],axis=1)
 
