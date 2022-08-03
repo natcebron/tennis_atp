@@ -40,7 +40,7 @@ def app():
     #Préparation de la page
 
     d_exploration = pd.read_csv("WTA/df_v3.csv")
-    base = pd.read_csv("base.csv")
+    base = pd.read_csv("WTA/df_versus.csv")
     d_exploration['Date_x'] = pd.to_datetime(d_exploration['Date_x'])
     d_exploration = d_exploration.sort_values(by='Date_x') 
     d_exploration = d_exploration.iloc[: , 1:]
