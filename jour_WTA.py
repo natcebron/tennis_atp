@@ -301,7 +301,7 @@ def app():
     result['%_bp_player_2'] = pd.to_numeric(result['%_bp_player_2'], errors = 'coerce')
     
     
-    df2 = pd.read_csv('C:/Users/ncebron/tennis_ATP/WTA/df2.csv')
+    df2 = pd.read_csv('WTA/df2.csv')
 
     df2["group"] = df2["first_player_id"] +' '+ df2["second_player_id"]
     df2['value'] = 1
